@@ -4,7 +4,8 @@ INTERFACE_SYSTEM
 	filecontext,
 	onkey,
 	on,
-	container_element
+	container_element,
+	store
 }) =>
 'context_operations', FACE => {
 	const mousePosition = {
