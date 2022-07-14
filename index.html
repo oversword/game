@@ -1,0 +1,402 @@
+<style>
+	body {
+		width: 100%;
+		height: 100%;
+	}
+	body, body * {
+		padding: :0;
+		margin: 0;
+		-webkit-user-select: none;  /* Chrome all / Safari all */
+		-moz-user-select: none;     /* Firefox all */
+		-ms-user-select: none;      /* IE 10+ */
+		-o-user-select: none;
+		user-select: none;
+		/* position: absolute; */
+	}
+	.popup-container, .popup-container * {
+		position: static;
+	}
+
+	.popup-container {
+		position: fixed;
+		width: 100%;
+		height: 100%;
+		background: rgba(0,0,0,0.1);
+		top: 0; left: 0;
+	}
+	.popup-container .popup-element {
+		font-family: sans-serif;
+		background: #FFFFFF;
+		border-radius: 10px;
+		overflow: hidden;
+		width: 50%;
+		min-width: 200px;
+		margin-left: auto;
+		margin-right: auto;
+		margin: auto;
+		position: absolute;
+		left: 0; right: 0;
+		/*top: 0; bottom: 0;*/
+		box-shadow: -2px 2px 11px -5px #000000;
+		margin-top: 200px;
+	}
+	.popup-container .popup-element .popup-title {
+		background: #EEEEEE;
+		border-bottom: 1px solid #999999;
+		padding: 10px;
+	}
+	.popup-container .popup-element .popup-content {
+		padding: 10px;
+	}
+	.popup-container .popup-element .popup-buttons {
+		border-top: 1px solid #999999;
+	}
+	.popup-container .popup-element .popup-buttons .popup-button {
+		padding: 10px;
+		width: 50%;
+		box-sizing: border-box;
+		text-align: center;
+		color: #FFFFFF;
+		font-weight: bold;
+	}
+	.popup-container .popup-element .popup-buttons .popup-button.popup-deny {
+		background: #BB9999;
+		float: left;
+	}
+	.popup-container .popup-element .popup-buttons .popup-button.popup-deny:hover {
+		background: #DDAAAA;
+	}
+	.popup-container .popup-element .popup-buttons .popup-button.popup-accept {
+		background: #99BB99;
+		float: right;
+	}
+	.popup-container .popup-element .popup-buttons .popup-button.popup-accept:hover {
+		background: #AADDAA;
+	}
+</style>
+
+<style>
+	@charset "utf-8";
+	.file-browser, .file-browser *,
+	.context, .context *,
+	.confirm, .confirm * {
+		position: initial;
+	}
+	.file-browser {
+		z-index: 10000;
+	}
+	.confirm {
+		z-index: 10001;
+	}
+	.context {
+		z-index: 10002;
+	}
+	.file-browser {
+		position: fixed;
+		left: 0;
+		right: 0;
+		top: 100px;
+		margin: 0 auto;
+		width: 80%;
+		min-width: 200px;
+		max-width: 500px;
+		background: #ddd;
+		border: 1px solid #aaa;
+		border-radius: 2px;
+		padding: 5px;
+	}
+	.file-browser-nav {
+		height: 25px;
+		width: 100%;
+	}
+	.file-browser-nav-buttons {
+		float: left;
+	}
+	.file-browser-nav-path {
+		margin-left: 10px;
+		float: left;
+	}
+	.file-browser-selection {
+		margin-top: 10px;
+	}
+	.file-browser-selection-display:before {
+		content: "Selected: ";
+	}
+	.file-browser-selection-buttons {
+		float:right;
+	}
+	.file-browser-list {
+		padding: 5px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+		background: #efefef;
+		border: 1px solid #ccc;
+		float: left;
+		width: 100%;
+		box-sizing: border-box;
+		min-height: 70px;
+	}
+	.file-browser-list-entry {
+		text-align:center;
+		float: left;
+		width: 70px;
+		text-overflow: ellipsis;
+		overflow: hidden;
+		height: 70px;
+		white-space: nowrap;
+	}
+	.file-browser-list-entry-folder:before {
+		font-size: 40px;
+		display: block;
+		content: "📁";
+	}
+	.file-browser-list-entry-folder:hover:before {
+		content: "📂";
+	}
+
+	.file-browser-list-entry-file:before {
+		font-size: 40px;
+		display: block;
+		content: "📄";
+	}
+	.file-browser-list-entry_game-level:before,
+	.tab-icon.icon-level:before {
+		content: "👾";
+	}
+	.file-browser-list-entry_game-combination:before,
+	.tab-icon.icon-combination:before {
+		content: "🎲";
+	}
+	.file-browser-selection-close:before,
+	.tab-close-button:before {
+		content: "❌";
+	}
+	.file-browser-selection-close:before {
+		font-size: 10px;
+		padding-right: 2px;
+	}
+
+	.file-browser-nav-back:before {
+		content:"↶";
+	}
+
+	.file-browser-nav-forth:before {
+		content:"↷";
+	}
+
+	.file-browser-nav-up:before {
+		content:"↰";
+	}
+
+	.file-browser-nav-back,
+	.file-browser-nav-forth,
+	.file-browser-nav-up {
+		font-size: 0px;
+	}
+
+	.file-browser-nav-back:before,
+	.file-browser-nav-forth:before,
+	.file-browser-nav-up:before {
+		font-size: 13px;
+	}
+
+	.context {
+		position: fixed;
+		background: #fff;
+		border: 1px solid #ccc;
+		padding: 5px 0;
+		min-width: 150px;
+	}
+	.context-item {
+		padding: 2px 10px;
+	}
+	.context-item:hover {
+		background: #efefef;
+	}
+
+	.confirm {
+		padding: 5px;
+		left: 0;
+		right: 0;
+		margin: 0 auto;
+		position: fixed;
+		top: 120px;
+		background: #ddd;
+		border: 1px solid #aaa;
+		border-radius: 2px;
+		width: 200px;
+	}
+	.confirm-contents {
+		margin-top: 10px;
+		margin-bottom: 10px;
+		padding: 5px;
+		background: #efefef;
+		border: 1px solid #ccc;
+	}
+	.confirm-message {
+	}
+	.confirm-input {
+		margin-top: 10px;
+	}
+	.confirm-buttons {
+		float:right;
+	}
+
+	.confirm-buttons .confirm-button {
+		text-transform: capitalize;
+	}
+</style>
+
+<style>
+
+.tabs {
+	font-family: sans-serif;
+}
+
+.tabs .tabs-list {
+	display: flex;
+	align-items: flex-end;
+	flex-wrap: wrap;
+	overflow:auto;
+}
+
+.tabs .tabs-list .tab {
+	float: none!important;
+
+	flex-grow: 1;
+	flex-shrink: 0;
+	min-width: 100px;
+	position: relative;
+	overflow: hidden;
+	border-bottom: 1px solid #666;
+	box-sizing: border-box;
+}
+
+.tabs .tabs-list .tab.tab-active {
+	border-color: transparent;
+}
+
+.tabs .tabs-list .tab .tab-icon {
+	width:20px;
+	height:20px;
+	position: absolute;
+	left:4px;
+	bottom:5px;
+
+	display: block;
+	font-style: inherit;
+	font-size: 14px;
+	text-align: center;
+	line-height: 20px;
+}
+.tabs .tabs-list .tab .tab-icon + .tab-label {
+	width: calc(100% - 40px);
+	margin-left:20px;
+}
+.tabs .tabs-list .tab .tab-label {
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	display: block;
+	overflow: hidden;
+	width: calc(100% - 20px);
+}
+.tabs .tabs-list .tab.tab-active .tab-container {
+	border-color: #666;
+}
+.tabs .tabs-list .tab .tab-container {
+	border: 1px solid transparent;
+	border-bottom: none;
+	border-radius: 4px 4px 0 0;
+	position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 5px;
+	box-sizing: border-box;
+}
+
+.tabs .tabs-list .tab .tab-close-button {
+	position: absolute;
+	bottom: 5px;
+	right: 3px;
+	height: 20px;
+	width: 20px;
+	line-height: 20px;
+	text-align: center;
+	padding: 0;
+	text-transform: uppercase;
+	font-size: 0px;
+	background: none;
+	border: none;
+}
+.tabs .tabs-list .tab .tab-close-button:hover {
+	cursor: pointer;
+}
+.tabs .tabs-list .tab .tab-close-button:before {
+	font-size: 8px;
+}
+
+/*
+.tabs .tabs-contents {
+
+}
+
+.tabs .tabs-contents .tab-content {
+
+}
+
+.tabs .tabs-contents .tab-content canvas {
+
+}
+*/
+
+</style>
+
+
+<script src="lib/htma/index.js" ></script>
+<script src="lib/filesystem/index.js" ></script>
+<script src="lib/filesystem/interface.js" ></script>
+
+<body></body>
+<!-- <script type="module" src="./listenable-proxy/index.js" ></script> -->
+<script src="lib/com.js" ></script>
+<script src="lib/classlib.js" ></script>
+<script src="lib/lib.js" ></script>
+
+<script src="style.js" ></script>
+<script src="app.js" ></script>
+
+<script src="components/drawing.js" async ></script>
+<script src="components/input.js" async ></script>
+<script src="components/logic.js" async ></script>
+<script src="components/physics.js" async ></script>
+
+<script src="data/component.js" ></script>
+<script src="data/connection.js" ></script>
+<script src="data/group.js" ></script>
+
+<script src="features/buttons.js" ></script>
+<script src="features/combination.js" ></script>
+<script src="features/component.js" ></script>
+<script src="features/connection.js" ></script>
+<script src="features/dataoperations.js" ></script>
+<script src="features/drag.js" ></script>
+<script src="features/edit.js" ></script>
+<script src="features/events.js" ></script>
+<script src="features/field.js" ></script>
+<script src="features/group.js" ></script>
+<script src="features/interaction.js" ></script>
+<script src="features/keyinput.js" ></script>
+<script src="features/palette.js" ></script>
+<script src="features/play.js" ></script>
+<script src="features/remove.js" ></script>
+<script src="features/selection.js" ></script>
+
+<script src="interface/index.js" ></script>
+<script src="interface/htma.js" ></script>
+<script src="interface/tabs.js" ></script>
+<script src="interface/filecontext.js" ></script>
+<script src="interface/testdata.js" ></script>
+<script src="interface/store.js" ></script>
+<script src="interface/datanormalisers.js" ></script>
+<script src="interface/systemdata.js" ></script>
+<script src="interface/contextoperations.js" ></script>
