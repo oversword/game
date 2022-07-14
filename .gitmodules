@@ -1,0 +1,6 @@
+[submodule "lib/filesystem"]
+	path = lib/filesystem
+	url = git@github.com:oversword/filesystem.git
+[submodule "lib/htma"]
+	path = lib/htma
+	url = git@github.com:oversword/htma.git
